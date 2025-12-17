@@ -1,5 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri = process.env.MongoDB_URI
+const uri = process.env.MONGO_URI;
+
+if (!uri) {
+  throw new Error("MongoDB URI is not defined");
+}
 
 export const client = new MongoClient(uri, {
   serverApi: {

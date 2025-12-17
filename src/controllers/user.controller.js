@@ -1,4 +1,4 @@
-import { userCollection } from "../models/user.models";
+import { userCollection } from "../models/user.models.js";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 
