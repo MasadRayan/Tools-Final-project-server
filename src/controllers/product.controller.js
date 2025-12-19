@@ -21,7 +21,7 @@ export const addManyProduct = async (req, res) => {
 export const paginatedProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0;
-        const limit = 10;
+        const limit = 9;
         const skip = page *limit;
 
         const products = await productCollection.find()

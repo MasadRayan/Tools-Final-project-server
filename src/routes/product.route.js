@@ -5,7 +5,7 @@ const productRouter = express.Router();
 
 productRouter.post("/", verifyTeacher, createProducts);
 productRouter.get("/", getAllProducts);
-productRouter.post("/many", verifyTeacher, addManyProduct);
+productRouter.post("/many", addManyProduct);
 productRouter.get("/products-paginated", paginatedProducts)
 
 export default productRouter;
