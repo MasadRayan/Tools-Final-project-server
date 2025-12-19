@@ -17,3 +17,27 @@ export const addManyProduct = async (req, res) => {
     const result = await productCollection.insertMany(products);
     res.send(result);
 }
+
+export const paginatedProducts = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 0;
+        const limit = 10;
+        const skip = page *limit;
+
+        const products = await productCollection.find()
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+
+        const total = await productCollection.estimatedDocumentCount();
+
+        res.send({
+            total,
+            page,
+            limit,
+            data : products
+        });
+    } catch (error) {
+        
+    }
+}
