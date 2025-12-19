@@ -25,3 +25,6 @@ export const getAllUsers = async (req, res) => {
     const result = await userCollection.find().toArray();
     res.send(result)
 }
+
+
+// get user role
