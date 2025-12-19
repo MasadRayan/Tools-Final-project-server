@@ -4,18 +4,12 @@ import { ObjectId } from "mongodb";
 
 // create user
 export const createUser = async (req, res) => {
-    const user = req.body;
-    const { email} = user;
-    if (!email) {
-        return res.status(400).send({message: "Email fields is required"});
+    const email = req.body.email;
+    const userExists = await userCollection.findOne({ email })
+    if (userExists) {
+        return res.status(200).send({ message: "User already exists", inserted: false });
     }
-
-    const oldUser = await userCollection.findOne({email});
-
-    if (oldUser) {
-        return res.status(409).send({message: "User already exists"});
-    }
-
+    const user = req.body
     const result = await userCollection.insertOne(user);
     res.send(result)
 }
