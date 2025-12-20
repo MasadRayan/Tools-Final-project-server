@@ -41,3 +41,11 @@ export const paginatedProducts = async (req, res) => {
         
     }
 }
+
+// get single Data
+export const getSingleProduct = async (req, res) => {
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)}
+    const result = await productCollection.findOne(query);
+    res.send(result)
+}
