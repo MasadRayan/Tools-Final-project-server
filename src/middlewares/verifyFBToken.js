@@ -2,7 +2,6 @@ import admin from "../config/firebase.js";
 
 export const verifyFBToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    console.log(authHeader);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "Unauthorized: No token provided" });

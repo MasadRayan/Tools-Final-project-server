@@ -22,12 +22,12 @@ export const paginatedProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0;
         const limit = 9;
-        const skip = page *limit;
+        const skip = page * limit;
 
         const products = await productCollection.find()
-        .skip(skip)
-        .limit(limit)
-        .toArray();
+            .skip(skip)
+            .limit(limit)
+            .toArray();
 
         const total = await productCollection.estimatedDocumentCount();
 
@@ -35,17 +35,22 @@ export const paginatedProducts = async (req, res) => {
             total,
             page,
             limit,
-            data : products
+            data: products
         });
     } catch (error) {
-        
+
     }
 }
 
 // get single Data
 export const getSingleProduct = async (req, res) => {
-    const id = req.params.id;
-    const query = {_id : new ObjectId(id)}
-    const result = await productCollection.findOne(query);
-    res.send(result)
+    try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) }
+        const result = await productCollection.findOne(query);
+        console.log(result, "from controller");
+    } catch (error) {
+        console.error("Error fetching class:", error);
+        res.status(500).send({ message: "Internal server error" });
+    }
 }

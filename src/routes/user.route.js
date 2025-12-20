@@ -5,7 +5,7 @@ const userRouter = express.Router();
 
 userRouter.post("/", createUser);
 userRouter.get("/", getAllUsers);
-userRouter.get("/:email/role",verifyFBToken, getUserRole);
+userRouter.get("/:email/role", verifyFBToken, getUserRole);
 
 
 export default userRouter;
