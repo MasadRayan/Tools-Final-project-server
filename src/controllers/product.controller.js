@@ -48,7 +48,7 @@ export const getSingleProduct = async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) }
         const result = await productCollection.findOne(query);
-        console.log(result, "from controller");
+        res.send(result);
     } catch (error) {
         console.error("Error fetching class:", error);
         res.status(500).send({ message: "Internal server error" });

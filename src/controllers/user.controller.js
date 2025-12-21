@@ -24,8 +24,6 @@ export const getAllUsers = async (req, res) => {
 // get user role
 export const getUserRole = async (req, res) => {
     const email = req.params.email; 
-    console.log(email, "from the controller");
-
     try {
         const user = await userCollection.findOne(
             { email },
