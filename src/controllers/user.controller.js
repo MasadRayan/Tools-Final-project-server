@@ -27,7 +27,6 @@ export const getAllUsers = async (req, res) => {
             .toArray();
 
         const total = await userCollection.estimatedDocumentCount();
-        console.log(users);
         res.send({
             total,
             page,
@@ -35,7 +34,7 @@ export const getAllUsers = async (req, res) => {
             data: users
         })
     } catch (error) {
-        
+        console.log(error);
     }
 }
 
