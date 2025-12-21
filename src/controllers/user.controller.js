@@ -55,3 +55,20 @@ export const getUserRole = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
+
+
+
+// update user role
+export const updateUserRole = async (req, res) => {
+    const email = req.params.email;
+    const {role} = req.body;
+    const filter = { email };
+    const options = { upsert: true };
+    const updateDoc = {
+        $set: {
+            role: role
+        },
+    };
+    const result = await userCollection.updateOne(filter, updateDoc, options);
+    res.send(result);
+}
