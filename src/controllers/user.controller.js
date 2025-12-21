@@ -16,8 +16,27 @@ export const createUser = async (req, res) => {
 
 // get all users
 export const getAllUsers = async (req, res) => {
-    const result = await userCollection.find().toArray();
-    res.send(result)
+    try {
+        const page = parseInt(req.query.page) || 0;
+        const limit = 10;
+        const skip = page * limit;
+
+        const users = await userCollection.find()
+            .skip(skip)
+            .limit(limit)
+            .toArray();
+
+        const total = await userCollection.estimatedDocumentCount();
+        console.log(users);
+        res.send({
+            total,
+            page,
+            limit,
+            data: users
+        })
+    } catch (error) {
+        
+    }
 }
 
 
