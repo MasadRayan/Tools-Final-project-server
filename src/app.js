@@ -18,8 +18,6 @@ Registered URL: www.buyNest.com
 Session API to generate transaction: https://sandbox.sslcommerz.com/gwprocess/v3/api.php
 Validation API: https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?wsdl
 Validation API (Web Service) name: https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php
-buynest
-masad2002
  */
 
 const app = express();

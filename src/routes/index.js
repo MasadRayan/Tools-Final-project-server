@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.use("/users", userRouter);
 router.use("/products", productRouter);
-router.use("/", paymentTouter);
+router.use("/ssl-payment", paymentTouter);
 
 export default router;
