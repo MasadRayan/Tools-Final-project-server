@@ -15,7 +15,7 @@ export const createSSLPayment = async (req, res) => {
         total_amount: paymentData.totalAmount,
         currency: 'BDT',
         tran_id: trxid, // use unique tran_id for each api call
-        success_url: 'http://localhost:5000/api/success-payment',
+        success_url: 'http://localhost:5000/api/ssl-payment/success-payment',
         fail_url: 'http://localhost:5173/fail',
         cancel_url: 'http://localhost:5173/cancel',
         ipn_url: 'http://localhost:5000/api/ipn-success-payment',
@@ -58,4 +58,9 @@ export const createSSLPayment = async (req, res) => {
     const gatewayUrl = iniResponse.data?.GatewayPageURL;
 
     res.send({ gatewayUrl  });
+};
+
+export const sslPaymentSuccess = async (req, res) => {
+    const paymentInfo = req.body;
+    console.log(paymentInfo);
 }
