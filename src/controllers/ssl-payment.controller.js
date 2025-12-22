@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ObjectId } from "mongodb";
 import { sslPaymentCollection } from "../models/sslPayment.models.js";
+import { productCollection } from "../models/products.models.js";
 
 export const createSSLPayment = async (req, res) => {
     const paymentData = req.body;
@@ -92,8 +93,28 @@ export const sslPaymentSuccess = async (req, res) => {
             upsert: true
         }
     );
-    res.send(updatePayment);
 
+    const product = await sslPaymentCollection.findOne({ transactionID: data.tran_id });
+    const { productId } = product;
+    const productInfo = await productCollection.findOne({ _id: new ObjectId(productId) });
+    const updatedQuantity = productInfo.quantity - product.quantity;
+
+    const updateProductQuantity = await productCollection.updateOne(
+        { _id: new ObjectId(productId) },
+        {
+            $set: {
+                quantity: updatedQuantity
+            }
+        },
+        {
+            upsert: true        
+        }
+    );
+
+    res.send(productInfo);
+
+    // step 8: you can redirect to a success page
+    res.redirect("http://localhost:5173/success");
 
     console.log(updatePayment);
 }
