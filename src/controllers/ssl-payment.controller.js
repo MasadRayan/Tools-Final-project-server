@@ -1,10 +1,13 @@
 import axios from "axios";
 import { ObjectId } from "mongodb";
+import { sslPaymentCollection } from "../models/sslPayment.models.js";
 
 export const createSSLPayment = async (req, res) => {
     const paymentData = req.body;
 
     const trxid = new ObjectId().toString();
+    
+    paymentData.transactionID = trxid;
 
     const initiate = {
         store_id: "buyne6949586debb4e",
@@ -12,10 +15,10 @@ export const createSSLPayment = async (req, res) => {
         total_amount: paymentData.totalAmount,
         currency: 'BDT',
         tran_id: trxid, // use unique tran_id for each api call
-        success_url: 'http://localhost:5000/success-payment',
+        success_url: 'http://localhost:5000/api/success-payment',
         fail_url: 'http://localhost:5173/fail',
         cancel_url: 'http://localhost:5173/cancel',
-        ipn_url: 'http://localhost:5000/ipn-success-payment',
+        ipn_url: 'http://localhost:5000/api/ipn-success-payment',
         shipping_method: 'NO',
         product_name: `${paymentData.productName}`,
         product_category: `${paymentData.productCategory}`,
@@ -48,9 +51,11 @@ export const createSSLPayment = async (req, res) => {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         }
-    )
+    );
+
+    const saveData = await sslPaymentCollection.insertOne(paymentData)
 
     const gatewayUrl = iniResponse.data?.GatewayPageURL;
 
-    console.log(gatewayUrl);
+    res.send({ gatewayUrl  });
 }

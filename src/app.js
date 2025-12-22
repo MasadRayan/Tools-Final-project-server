@@ -23,6 +23,7 @@ Validation API (Web Service) name: https://sandbox.sslcommerz.com/validator/api/
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
