@@ -6,9 +6,10 @@ export const createSSLPayment = async (req, res) => {
     const paymentData = req.body;
 
     const trxid = new ObjectId().toString();
-    
+
     paymentData.transactionID = trxid;
 
+    // stape 1: initiate the payment
     const initiate = {
         store_id: "buyne6949586debb4e",
         store_passwd: "buyne6949586debb4e@ssl",
@@ -43,6 +44,9 @@ export const createSSLPayment = async (req, res) => {
         ship_add2: 'Dhaka&',
         ship_city: 'Dhaka&',
     };
+
+
+    // step 2: initiate the payment request to SSLCOMMERZ
     const iniResponse = await axios.post(
         "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
         initiate,
@@ -55,12 +59,41 @@ export const createSSLPayment = async (req, res) => {
 
     const saveData = await sslPaymentCollection.insertOne(paymentData)
 
+    // step 3: get the GatewayPageURL and redirect to that URL
     const gatewayUrl = iniResponse.data?.GatewayPageURL;
 
-    res.send({ gatewayUrl  });
+    // step 4: redirect the client to the gateway page URL
+    res.send({ gatewayUrl });
 };
 
 export const sslPaymentSuccess = async (req, res) => {
+    // step 5: success the payment
     const paymentInfo = req.body;
-    console.log(paymentInfo);
+
+    // step 6: validate the payment
+    const { data } = await axios.get(`https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?
+        val_id=${paymentInfo.val_id}&store_id=buyne6949586debb4e&store_passwd=buyne6949586debb4e@ssl&format=json`);
+
+    if (data.status !== "VALID") {
+        return res.status(400).send({ message: "Payment Failed" });
+    }
+
+    // step 7: update payment status in the database
+    const updatePayment = await sslPaymentCollection.updateOne(
+        {
+            transactionID: data.tran_id
+        },
+        {
+            $set: {
+                paymentStatus: "Success"
+            }
+        },
+        {
+            upsert: true
+        }
+    );
+    res.send(updatePayment);
+
+
+    console.log(updatePayment);
 }
