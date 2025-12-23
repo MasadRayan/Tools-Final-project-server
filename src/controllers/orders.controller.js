@@ -74,7 +74,7 @@ export const updateOrderStatus = async (req, res) => {
     }
 }
 
-// get user specidic orders
+// get user specific orders
 export const getUserOrders = async (req, res) => {
     const userEmail = req.params.email;
     const query = { email : userEmail};
@@ -100,6 +100,19 @@ export const getUserOrders = async (req, res) => {
             limit,
             data: orders
         });
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+
+// delete order
+export const deleteOrder = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const query = { _id: new ObjectId(orderId) };
+        const result = await ordersCollection.deleteOne(query);
+        res.send(result);
     } catch (error) {
         res.status(500).send({ message: "Internal server error" });
     }
