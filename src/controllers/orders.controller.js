@@ -1,6 +1,8 @@
 import { ordersCollection } from "../models/orders.models.js";
 import { ObjectId } from "mongodb";
 
+
+// create order
 export const createOrder = async (req, res) => {
     try {
         const order = req.body;
@@ -22,6 +24,16 @@ export const createOrder = async (req, res) => {
         
     } catch (error) {
         console.log(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+// get all orders
+export const getAllOrders = async (req, res) => {
+    try {
+        const result = await ordersCollection.find().toArray();
+        res.send(result);
+    } catch (error) {
         res.status(500).send({ message: "Internal server error" });
     }
 }
