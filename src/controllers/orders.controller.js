@@ -78,14 +78,28 @@ export const updateOrderStatus = async (req, res) => {
 export const getUserOrders = async (req, res) => {
     const userEmail = req.params.email;
     const query = { email : userEmail};
+    const page = parseInt(req.query.page) || 0;
+    const limit = 10;
+    const skip = page * limit;
 
     if (!userEmail) {
         return res.status(400).send({ message: "User email is required" });
     }
 
     try {
-        const orders = await ordersCollection.find(query).toArray();
-        res.send(orders);
+        const orders = await ordersCollection.find(query)
+            .skip(skip)
+            .limit(limit)
+            .toArray();
+
+        const total = await ordersCollection.estimatedDocumentCount();
+
+        res.send({
+            total,
+            page,
+            limit,
+            data: orders
+        });
     } catch (error) {
         res.status(500).send({ message: "Internal server error" });
     }
