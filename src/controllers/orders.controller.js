@@ -116,10 +116,11 @@ export const deleteOrder = async (req, res) => {
         // find the order 
         const order =  await ordersCollection.findOne(query);
 
+        // get product id and quantity from order
         const {productId, quantity} = order;
 
         // update product quantity back
-        const res = await productCollection.updateOne(
+        const reslt = await productCollection.updateOne(
             { _id: new ObjectId(productId) },
             { $inc: { quantity: quantity } },
             { upsert: true }
