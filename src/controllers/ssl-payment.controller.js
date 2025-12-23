@@ -126,3 +126,29 @@ export const getUserPayments = async (req, res) => {
         res.status(500).send({ message: "Internal server error" });
     }
 }
+
+
+// getting all payments (admin)
+export const getAllPayments = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 0;
+        const limit = 10;
+        const skip = page * limit;
+
+        const payments = await sslPaymentCollection.find()
+            .skip(skip)
+            .limit(limit)
+            .toArray();
+
+        const total = await sslPaymentCollection.estimatedDocumentCount();
+        res.send({
+            total,
+            page,
+            limit,
+            data: payments
+        });
+
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
