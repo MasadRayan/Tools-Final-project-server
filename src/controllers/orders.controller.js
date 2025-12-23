@@ -54,3 +54,22 @@ export const getAllOrders = async (req, res) => {
         res.status(500).send({ message: "Internal server error" });
     }
 }
+
+// Update order status
+export const updateOrderStatus = async (req, res) => {
+    const orderId = req.params.id;
+    const { status } = req.body;
+    try {
+        const filter = { _id: new ObjectId(orderId) };
+        const updateDoc = {
+            $set: {
+                status: status
+            },
+        };
+        const options = { upsert: true };
+        const result = await ordersCollection.updateOne(filter, updateDoc, options);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
