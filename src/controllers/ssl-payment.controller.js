@@ -101,3 +101,28 @@ export const sslPaymentSuccess = async (req, res) => {
 
     console.log(updatePayment);
 }
+
+
+// getting personal payment info
+export const getUserPayments = async (req, res) => {
+    const email = req.params.email;
+    const page = parseInt(req.query.page) || 0;
+    const limit = 10;
+    const skip = page * limit;
+    try {
+        const payments = await sslPaymentCollection.find({ email })
+            .skip(skip)
+            .limit(limit)
+            .toArray();
+
+        const total = await sslPaymentCollection.estimatedDocumentCount();
+        res.send({
+            total,
+            page,
+            limit,
+            data: payments
+        });
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
