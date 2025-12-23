@@ -86,7 +86,7 @@ export const sslPaymentSuccess = async (req, res) => {
         },
         {
             $set: {
-                paymentStatus: "Success"
+                status: "success"
             }
         },
         {
