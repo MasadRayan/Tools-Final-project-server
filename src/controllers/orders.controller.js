@@ -1,5 +1,6 @@
 import { ordersCollection } from "../models/orders.models.js";
 import { ObjectId } from "mongodb";
+import { productCollection } from "../models/products.models.js";
 
 
 // create order
@@ -110,7 +111,20 @@ export const getUserOrders = async (req, res) => {
 export const deleteOrder = async (req, res) => {
     const orderId = req.params.id;
     try {
+        // Query to find the order by ID
         const query = { _id: new ObjectId(orderId) };
+        // find the order 
+        const order =  await ordersCollection.findOne(query);
+
+        const {productId, quantity} = order;
+
+        // update product quantity back
+        const res = await productCollection.updateOne(
+            { _id: new ObjectId(productId) },
+            { $inc: { quantity: quantity } },
+            { upsert: true }
+        );
+
         const result = await ordersCollection.deleteOne(query);
         res.send(result);
     } catch (error) {
