@@ -94,27 +94,10 @@ export const sslPaymentSuccess = async (req, res) => {
         }
     );
 
-    const product = await sslPaymentCollection.findOne({ transactionID: data.tran_id });
-    const { productId } = product;
-    const productInfo = await productCollection.findOne({ _id: new ObjectId(productId) });
-    const updatedQuantity = productInfo.quantity - product.quantity;
-
-    const updateProductQuantity = await productCollection.updateOne(
-        { _id: new ObjectId(productId) },
-        {
-            $set: {
-                quantity: updatedQuantity
-            }
-        },
-        {
-            upsert: true        
-        }
+    res.redirect(
+        `http://localhost:5173/success?trxid=${data.tran_id}`
     );
 
-    res.send(productInfo);
-
-    // step 8: you can redirect to a success page
-    res.redirect("http://localhost:5173/success");
 
     console.log(updatePayment);
 }

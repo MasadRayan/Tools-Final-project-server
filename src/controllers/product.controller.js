@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { productCollection } from "../models/products.models.js";
+import { sslPaymentCollection } from "../models/sslPayment.models.js";
 
 export const createProducts = async (req, res) => {
     const product = req.body;
@@ -51,6 +52,32 @@ export const getSingleProduct = async (req, res) => {
         res.send(result);
     } catch (error) {
         console.error("Error fetching class:", error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+export const getProductByTransactionID = async (req, res) => {
+    try {
+        const transactionID = req.params.id;
+        const query = { transactionID: transactionID }
+        const paymentInfo = await sslPaymentCollection.findOne(query);
+        const { productId } = paymentInfo;
+        const productInfo = await productCollection.findOne({ _id: new ObjectId(productId) });
+        const updatedQuantity = productInfo.quantity - paymentInfo.quantity;
+        const updateProductQuantity = await productCollection.updateOne(
+            { _id: new ObjectId(productId) },
+            {
+                $set: {
+                    quantity: updatedQuantity
+                }
+            },
+            {
+                upsert: true
+            }
+        );
+        res.send({ paymentInfo, productInfo, updateProductQuantity });
+    } catch (error) {
+        console.log(error);
         res.status(500).send({ message: "Internal server error" });
     }
 }
