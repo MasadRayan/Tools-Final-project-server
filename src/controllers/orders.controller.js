@@ -73,3 +73,20 @@ export const updateOrderStatus = async (req, res) => {
         res.status(500).send({ message: "Internal server error" });
     }
 }
+
+// get user specidic orders
+export const getUserOrders = async (req, res) => {
+    const userEmail = req.params.email;
+    const query = { email : userEmail};
+
+    if (!userEmail) {
+        return res.status(400).send({ message: "User email is required" });
+    }
+
+    try {
+        const orders = await ordersCollection.find(query).toArray();
+        res.send(orders);
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
