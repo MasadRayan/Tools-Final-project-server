@@ -5,6 +5,7 @@ import paymentTouter from "./ssl-payment.route.js";
 import orderRouter from "./order.route.js";
 import adminAggerateRouter from "./adminAggerate.route.js";
 import userAggregateDataRouter from "./userAggregate.route.js";
+import chatbotRouter from "./chatbot.route.js";
 const router = express.Router();
 
 router.use("/users", userRouter);
@@ -13,5 +14,6 @@ router.use("/ssl-payment", paymentTouter);
 router.use("/orders", orderRouter);
 router.use("/admin", adminAggerateRouter);
 router.use("/userDashboard", userAggregateDataRouter);
+router.use("/chatbot", chatbotRouter)
 
 export default router;
