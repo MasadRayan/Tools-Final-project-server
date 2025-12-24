@@ -5,7 +5,7 @@ import { verifyFBToken } from "../middlewares/verifyFBToken.js";
 const productRouter = express.Router();
 
 productRouter.post("/", verifyFBToken, verifyAdmin, createProducts);
-productRouter.get("/", getAllProducts);
+productRouter.get("/all", getAllProducts);
 productRouter.post("/many", verifyAdmin, addManyProduct);
 productRouter.get("/products-paginated", paginatedProducts)
 productRouter.get("/:id", verifyFBToken, getSingleProduct)
