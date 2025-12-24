@@ -43,7 +43,8 @@ export const paginatedProducts = async (req, res) => {
             data: products
         });
     } catch (error) {
-
+        console.error("Error fetching classes:", error);
+        res.status(500).send({ message: "Internal server error" });
     }
 }
 
