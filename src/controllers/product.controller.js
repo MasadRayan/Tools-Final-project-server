@@ -94,3 +94,44 @@ export const deleteProduct = async (req, res) => {
     const result = await productCollection.deleteOne(query);
     res.send(result);
 }
+
+// update product
+export const updateProduct = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const {
+            price,
+            discountedPrice,
+            quantity,
+            rating
+        } = req.body;
+
+        // Build update object dynamically
+        const updateFields = {};
+
+        if (price !== undefined) updateFields.price = Number(price);
+        if (discountedPrice !== undefined) updateFields.discountedPrice = Number(discountedPrice);
+        if (quantity !== undefined) updateFields.quantity = Number(quantity);
+        if (rating !== undefined) updateFields.rating = Number(rating);
+
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).send({ message: "No valid fields provided for update" });
+        }
+
+        const result = await productCollection.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateFields }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).send({ message: "Product not found" });
+        }
+
+        res.send(result);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: "Internal server error" });
+    }
+};
