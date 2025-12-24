@@ -2,23 +2,27 @@ import { ObjectId } from "mongodb";
 import { productCollection } from "../models/products.models.js";
 import { sslPaymentCollection } from "../models/sslPayment.models.js";
 
+// create product
 export const createProducts = async (req, res) => {
     const product = req.body;
     const result = await productCollection.insertOne(product);
     res.send(result);
 }
 
+// get all products
 export const getAllProducts = async (req, res) => {
     const result = await productCollection.find().toArray();
     res.send(result);
 }
 
+// add many product
 export const addManyProduct = async (req, res) => {
     const products = req.body;
     const result = await productCollection.insertMany(products);
     res.send(result);
 }
 
+// get paginated products
 export const paginatedProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 0;
@@ -56,6 +60,7 @@ export const getSingleProduct = async (req, res) => {
     }
 }
 
+// get product by transaction id
 export const getProductByTransactionID = async (req, res) => {
     try {
         const transactionID = req.params.id;
@@ -80,4 +85,12 @@ export const getProductByTransactionID = async (req, res) => {
         console.log(error);
         res.status(500).send({ message: "Internal server error" });
     }
+}
+
+// delete product
+export const deleteProduct = async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await productCollection.deleteOne(query);
+    res.send(result);
 }
