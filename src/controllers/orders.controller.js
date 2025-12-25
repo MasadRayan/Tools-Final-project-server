@@ -132,3 +132,15 @@ export const deleteOrder = async (req, res) => {
         res.status(500).send({ message: "Internal server error" });
     }
 }
+
+// get single order by id
+export const getSingleOrder = async (req, res) => {
+    const orderId = req.params.id;
+    try {
+        const query = { _id: new ObjectId(orderId) };
+        const result = await ordersCollection.findOne(query);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
