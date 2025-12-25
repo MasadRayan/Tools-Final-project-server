@@ -1,8 +1,10 @@
 import express from "express";
 const reviewRouter = express.Router();
 
-import { addReview } from "../controllers/review.controller.js";
+import { addReview, getAllReviews } from "../controllers/review.controller.js";
+import { verifyFBToken } from "../middlewares/verifyFBToken.js";
 
-reviewRouter.post("/", addReview);
+reviewRouter.post("/", verifyFBToken, addReview);
+reviewRouter.get("/getAllData", getAllReviews);
 
 export default reviewRouter
