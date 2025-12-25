@@ -18,8 +18,8 @@ export const createSSLPayment = async (req, res) => {
         currency: 'BDT',
         tran_id: trxid, // use unique tran_id for each api call
         success_url: 'http://localhost:5000/api/ssl-payment/success-payment',
-        fail_url: 'http://localhost:5173/fail',
-        cancel_url: 'http://localhost:5173/cancel',
+        fail_url: 'https://tools-final-projectt.web.app/fail',
+        cancel_url: 'https://tools-final-projectt.web.app/cancel',
         ipn_url: 'http://localhost:5000/api/ipn-success-payment',
         shipping_method: 'NO',
         product_name: `${paymentData.productName}`,
@@ -95,7 +95,7 @@ export const sslPaymentSuccess = async (req, res) => {
     );
 
     res.redirect(
-        `http://localhost:5173/success?trxid=${data.tran_id}`
+        `https://tools-final-projectt.web.app/success?trxid=${data.tran_id}`
     );
 
 
